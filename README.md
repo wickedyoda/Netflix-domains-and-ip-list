@@ -1,44 +1,110 @@
 # Netflix Domains & IP Ranges
 
-This repository contains known Netflix domains and IP ranges
-for use in firewalls, DNS filtering, routing policies, and traffic analysis.
+This repository contains **known Netflix-related domains and IP ranges**
+commonly observed in production traffic.  
+It is intended for use with **firewalls, DNS filtering, policy routing,
+VPN split tunneling, and traffic analysis**.
 
-## ⚠️ Important Notes
+This is a **practical reference**, not an authoritative or complete list.
+Netflix infrastructure is intentionally dynamic.
 
-- Netflix intentionally rotates infrastructure.
-- IPs outside AS2906 are often AWS or ISP-local caches.
-- This list should be treated as a **baseline**, not a guarantee.
-- Domain-based filtering is more reliable than IP-only filtering.
+---
 
-## Contents
+## 📁 Repository Contents
 
-- domains.txt        → Known Netflix domains
-- ipv4-ranges.txt    → Netflix-owned Open Connect IP ranges
-- asn.txt            → Netflix ASN
+- `domains.txt`  
+  Known Netflix domains used for streaming, applications, APIs, assets,
+  corporate properties, and performance testing.
 
-## Common Use Cases
+- `ipv4-ranges.txt`  
+  Netflix Open Connect IPv4 ranges commonly attributed to **AS2906**.
+
+- `ipv6-ranges.txt`  
+  Observed Netflix IPv6 prefixes, including Open Connect and
+  Netflix-adjacent delivery networks.
+
+- `asn.txt`  
+  Netflix autonomous system reference.
+
+---
+
+## 🌐 Domains
+
+Domains are the **most reliable** way to identify Netflix traffic.
+
+Netflix uses DNS-based load balancing, regional CDNs, and ISP-local caches.
+Domain-based rules work better than static IP rules in most environments.
+
+Examples include:
+- `netflix.com`
+- `nflxvideo.net`
+- `nflximg.net`
+- `fast.com`
+
+See `domains.txt` for the full list.
+
+---
+
+## 📡 IPv4 Ranges
+
+The IPv4 ranges in this repo primarily belong to:
+
+- **AS2906 — Netflix Streaming Services (Open Connect)**
+
+These ranges are commonly used for **video delivery**, but:
+- Not all Netflix traffic uses these IPs
+- Some delivery may occur via ISP-local Open Connect caches
+
+See `ipv4-ranges.txt` for the full list.
+
+---
+
+## 🌍 IPv6 Considerations (Important)
+
+Netflix uses IPv6 extensively, but IPv6 delivery is **highly dynamic**.
+
+Key points:
+- IPv6 prefixes may change by region and ISP
+- Some Netflix IPv6 traffic originates from ISP-owned ASNs
+- Static IPv6 IP-only rules are fragile
+
+**Strong recommendation:**  
+Use **domain-based filtering** and **ASN matching** whenever possible.
+
+See `ipv6-ranges.txt` for observed prefixes.
+
+---
+
+## 🔀 Recommended Best Practices
+
+- ✅ Prefer **domains over IPs**
+- ✅ Use **ASN AS2906** when supported
+- ✅ Use DNS-based policy routing for VPN split tunneling
+- ❌ Avoid relying on IP-only rules for blocking or routing
+- ❌ Avoid forcing Netflix traffic through VPNs unless necessary
+
+---
+
+## 🔧 Common Use Cases
 
 - OpenWrt / GL.iNet firewall rules
-- Split tunneling exclusions
-- Pi-hole / AdGuard filtering
-- Traffic classification
-- VPN debugging
+- nftables / iptables / pfSense aliases
+- Pi-hole / AdGuard DNS filtering
+- VPN split tunneling exclusions
+- Traffic identification and debugging
+- Lab environments and documentation
 
-## ASN Reference
+---
 
-- AS2906 — Netflix Streaming Services
+## ⚠️ Disclaimer
 
-## IPv6 Considerations
+Netflix infrastructure changes frequently.
+This repository reflects **known and observed data** at the time of curation.
+No guarantee is made that all Netflix traffic will match these entries.
 
-Netflix uses IPv6 extensively, but IPv6 routing is highly dynamic.
-Many Netflix IPv6 endpoints are delivered via ISP-local Open Connect
-caches and may not always originate directly from AS2906.
+---
 
-For best results:
-- Prefer domain-based filtering for IPv6
-- Use ASN-based rules where supported
-- Avoid hard-blocking IPv6 Netflix ranges unless necessary
+## 📜 License
 
-## License
-
-MIT (use freely, attribution appreciated)
+MIT License  
+Free to use, modify, and redistribute. Attribution appreciated.
