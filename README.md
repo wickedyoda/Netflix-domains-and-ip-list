@@ -1,110 +1,65 @@
-# Netflix Domains & IP Ranges
+# Domain and IP Lists for Policy Routing
 
-This repository contains **known Netflix-related domains and IP ranges**
-commonly observed in production traffic.  
-It is intended for use with **firewalls, DNS filtering, policy routing,
-VPN split tunneling, and traffic analysis**.
+This repository contains domain and network lists for streaming services,
+social platforms, device ecosystems, and other traffic groups that you may
+want to route through different VPN exits, WAN paths, or filtering policies.
 
-This is a **practical reference**, not an authoritative or complete list.
-Netflix infrastructure is intentionally dynamic.
+Use these lists with tools like OpenWrt/GL.iNet policy routing, pfSense
+aliases, DNS-based split tunneling, firewall sets, and proxy rules.
 
----
+## Repository Structure
 
-## 📁 Repository Contents
+- `netflix/domains.md`  
+  Netflix-focused domains (streaming, apps, APIs, support, corporate).
 
-- `domains.txt`  
-  Known Netflix domains used for streaming, applications, APIs, assets,
-  corporate properties, and performance testing.
+- `netflix/router-list.txt`  
+  Combined Netflix router list (domains + CIDRs) for direct import/use in
+  policy routing and alias tools.
 
-- `ipv4-ranges.txt`  
-  Netflix Open Connect IPv4 ranges commonly attributed to **AS2906**.
+- `netflix/ipv4-address.md`  
+  Netflix/Open Connect IPv4 ranges.
 
-- `ipv6-ranges.txt`  
-  Observed Netflix IPv6 prefixes, including Open Connect and
-  Netflix-adjacent delivery networks.
+- `netflix/ipv6-address.md`  
+  Netflix/Open Connect IPv6 ranges.
 
-- `asn.txt`  
-  Netflix autonomous system reference.
+- `netflix/ans.md`  
+  Netflix-related ASN references.
 
----
+- `streaming_services/streaming_domains_whitelist.txt`  
+  Mixed streaming provider domains and related IP ranges.
 
-## 🌐 Domains
+- `social_media/social_media.txt`  
+  Social media domain list.
 
-Domains are the **most reliable** way to identify Netflix traffic.
+- `porn/known_porn_domains_v2.txt`  
+  Large categorized/adult-domain style list for filtering or routing.
 
-Netflix uses DNS-based load balancing, regional CDNs, and ISP-local caches.
-Domain-based rules work better than static IP rules in most environments.
+- `bypass_sites.txt`  
+  General bypass set (social/media/mixed) for alternate route handling.
 
-Examples include:
-- `netflix.com`
-- `nflxvideo.net`
-- `nflximg.net`
-- `fast.com`
+- `bamboo_printer/bamboo_domains.txt`  
+  Bambu Lab and Makerworld related domains for device/cloud connectivity.
 
-See `domains.txt` for the full list.
+## Suggested Usage Pattern
 
----
+1. Keep one list per routing intent (for example: `vpn-us`, `vpn-uk`,
+   `direct`, `blocked`, `dns-only`).
+2. Prefer domain-based matching first, then add IP/ASN where needed.
+3. Refresh lists periodically and monitor misses in firewall/DNS logs.
+4. Test on a non-critical client before rolling rules to your full network.
 
-## 📡 IPv4 Ranges
+## Notes on Accuracy
 
-The IPv4 ranges in this repo primarily belong to:
+- Domain and CDN infrastructure changes frequently.
+- Some services use regional/ISP-local endpoints not always captured in static
+  files.
+- IP-only matching is useful, but domain-based rules are usually more stable.
 
-- **AS2906 — Netflix Streaming Services (Open Connect)**
+## Disclaimer
 
-These ranges are commonly used for **video delivery**, but:
-- Not all Netflix traffic uses these IPs
-- Some delivery may occur via ISP-local Open Connect caches
+These lists are curated references, not authoritative vendor feeds. Use at your
+own risk and validate against your own traffic patterns.
 
-See `ipv4-ranges.txt` for the full list.
+## License
 
----
-
-## 🌍 IPv6 Considerations (Important)
-
-Netflix uses IPv6 extensively, but IPv6 delivery is **highly dynamic**.
-
-Key points:
-- IPv6 prefixes may change by region and ISP
-- Some Netflix IPv6 traffic originates from ISP-owned ASNs
-- Static IPv6 IP-only rules are fragile
-
-**Strong recommendation:**  
-Use **domain-based filtering** and **ASN matching** whenever possible.
-
-See `ipv6-ranges.txt` for observed prefixes.
-
----
-
-## 🔀 Recommended Best Practices
-
-- ✅ Prefer **domains over IPs**
-- ✅ Use **ASN AS2906** when supported
-- ✅ Use DNS-based policy routing for VPN split tunneling
-- ❌ Avoid relying on IP-only rules for blocking or routing
-- ❌ Avoid forcing Netflix traffic through VPNs unless necessary
-
----
-
-## 🔧 Common Use Cases
-
-- OpenWrt / GL.iNet firewall rules
-- nftables / iptables / pfSense aliases
-- Pi-hole / AdGuard DNS filtering
-- VPN split tunneling exclusions
-- Traffic identification and debugging
-- Lab environments and documentation
-
----
-
-## ⚠️ Disclaimer
-
-Netflix infrastructure changes frequently.
-This repository reflects **known and observed data** at the time of curation.
-No guarantee is made that all Netflix traffic will match these entries.
-
----
-
-## 📜 License
-
-MIT License  
-Free to use, modify, and redistribute. Attribution appreciated.
+MIT
